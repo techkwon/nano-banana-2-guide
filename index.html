@@ -679,9 +679,159 @@
       .hero-title { letter-spacing: -1px; }
     }
     [id] { scroll-margin-top: 74px; }
+
+    /* ── INTRO LOADER ── */
+    #intro-loader {
+      position: fixed; inset: 0; z-index: 10000;
+      background: #000;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    #intro-loader.done {
+      animation: loader-exit 0.8s cubic-bezier(0.76,0,0.24,1) 0.2s both;
+    }
+    @keyframes loader-exit {
+      0% { clip-path: inset(0 0 0 0); opacity:1; }
+      100% { clip-path: inset(0 0 100% 0); opacity:0; pointer-events:none; }
+    }
+    .intro-banana {
+      font-size: 6rem; line-height: 1;
+      animation: banana-spin 1.2s cubic-bezier(0.34,1.56,0.64,1) both;
+      filter: drop-shadow(0 0 40px rgba(245,166,35,0.8));
+    }
+    @keyframes banana-spin {
+      0% { transform: scale(0) rotate(-180deg); opacity:0; }
+      100% { transform: scale(1) rotate(0deg); opacity:1; }
+    }
+    .intro-text {
+      font-family: 'Space Mono', monospace;
+      font-size: clamp(1.2rem, 4vw, 2rem);
+      font-weight: 700; color: #fff;
+      margin-top: 24px; letter-spacing: 4px;
+      text-transform: uppercase;
+      overflow: hidden;
+    }
+    .intro-text span {
+      display: inline-block;
+      animation: char-drop 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+    @keyframes char-drop {
+      from { transform: translateY(-60px) rotate(-20deg); opacity:0; }
+      to   { transform: translateY(0) rotate(0deg); opacity:1; }
+    }
+    .intro-bar-wrap {
+      width: 240px; height: 2px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 2px; margin-top: 40px; overflow: hidden;
+    }
+    .intro-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent4));
+      width: 0%; transition: width 0.05s linear;
+      border-radius: 2px;
+    }
+    .intro-pct {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem; color: rgba(255,255,255,0.4);
+      margin-top: 12px; letter-spacing: 2px;
+    }
+    /* BURST PARTICLES */
+    .burst-particle {
+      position: fixed; pointer-events: none; z-index: 9990;
+      width: 8px; height: 8px; border-radius: 50%;
+      animation: burst-fly 1s ease-out both;
+    }
+    @keyframes burst-fly {
+      0% { transform: translate(0,0) scale(1); opacity:1; }
+      100% { transform: translate(var(--bx), var(--by)) scale(0); opacity:0; }
+    }
+    /* SHOCKWAVE */
+    .shockwave {
+      position: fixed; pointer-events: none; z-index: 9989;
+      border-radius: 50%;
+      border: 2px solid rgba(245,166,35,0.8);
+      animation: shock-expand 0.8s ease-out both;
+    }
+    @keyframes shock-expand {
+      0% { width:0; height:0; opacity:1; transform:translate(-50%,-50%); }
+      100% { width:400px; height:400px; opacity:0; transform:translate(-50%,-50%); }
+    }
+    /* TILT CARD */
+    .tilt { transform-style: preserve-3d; transition: transform 0.1s; }
+    /* TYPEWRITER */
+    .typewriter { border-right: 2px solid var(--accent); white-space: nowrap; overflow: hidden; }
+    /* AURORA BG */
+    .aurora {
+      position: absolute; inset: 0; z-index: 0;
+      background: 
+        radial-gradient(ellipse 80% 50% at 20% 40%, rgba(245,166,35,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 80% 60%, rgba(233,69,96,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 60% at 50% 20%, rgba(168,85,247,0.05) 0%, transparent 60%);
+      animation: aurora-shift 12s ease-in-out infinite alternate;
+    }
+    @keyframes aurora-shift {
+      0%   { filter: hue-rotate(0deg) brightness(1); }
+      100% { filter: hue-rotate(30deg) brightness(1.2); }
+    }
+    /* 3-COL COMPARE */
+    .compare-wrap-3 {
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2px;
+      border-radius: 20px; overflow: hidden;
+      border: 1px solid var(--border);
+      margin-top: 48px;
+    }
+    .compare-col.vpro {
+      background: linear-gradient(160deg, #1a0a2e, #13132a);
+    }
+    .compare-col.vpro::before {
+      background: linear-gradient(90deg, var(--accent4), var(--accent3));
+    }
+    .compare-col.vpro .compare-version { color: var(--accent4); }
+    @media (max-width: 900px) {
+      .compare-wrap-3 { grid-template-columns: 1fr; }
+    }
+    /* FLOATING BADGE */
+    .float-badge {
+      position: absolute; top: -12px; right: 20px;
+      background: linear-gradient(135deg, var(--accent4), var(--accent3));
+      color: #fff; font-size: 0.65rem; font-weight: 700;
+      padding: 4px 12px; border-radius: 20px; letter-spacing: 1px;
+      text-transform: uppercase;
+      box-shadow: 0 4px 20px rgba(168,85,247,0.4);
+      animation: badge-float 2s ease-in-out infinite;
+    }
+    @keyframes badge-float {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+    /* HERO COUNTER */
+    .hero-stats {
+      display: flex; gap: 40px; justify-content: center;
+      margin-top: 48px; flex-wrap: wrap;
+      animation: fade-up 0.8s ease 0.4s both;
+    }
+    .hero-stat { text-align: center; }
+    .hero-stat-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 2.2rem; font-weight: 700;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; line-height: 1;
+    }
+    .hero-stat-label { font-size: 0.75rem; color: var(--muted); margin-top: 4px; letter-spacing: 0.5px; }
   </style>
 </head>
 <body>
+
+<!-- INTRO LOADER -->
+<div id="intro-loader">
+  <div class="aurora"></div>
+  <div class="intro-banana" id="intro-banana">🍌</div>
+  <div class="intro-text" id="intro-text"></div>
+  <div class="intro-bar-wrap"><div class="intro-bar" id="intro-bar"></div></div>
+  <div class="intro-pct" id="intro-pct">0%</div>
+</div>
 
 <!-- CURSOR -->
 <div id="cursor"></div>
@@ -710,6 +860,7 @@
 
 <!-- HERO -->
 <section class="hero">
+  <div class="aurora"></div>
   <div class="hero-bg-grid"></div>
   <div class="hero-glow"></div>
   <div class="hero-glow2"></div>
@@ -733,6 +884,13 @@
   <div class="hero-cta">
     <a href="#cases" class="btn-primary"><span>활용사례 보기 →</span></a>
     <a href="#prompts" class="btn-secondary">프롬프트 복사하기</a>
+  </div>
+
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="hero-stat-num" data-target="50" data-suffix="+">0</div><div class="hero-stat-label">실제 사례</div></div>
+    <div class="hero-stat"><div class="hero-stat-num" data-target="30" data-suffix="+">0</div><div class="hero-stat-label">검증 프롬프트</div></div>
+    <div class="hero-stat"><div class="hero-stat-num" data-target="4" data-suffix="K">0</div><div class="hero-stat-label">최대 해상도</div></div>
+    <div class="hero-stat"><div class="hero-stat-num" data-target="20" data-suffix="">0</div><div class="hero-stat-label">아트 스타일</div></div>
   </div>
 
   <div class="stats-ticker">
@@ -767,9 +925,9 @@
     <p class="section-desc">Gemini 3 Pro Image 기반으로 전면 업그레이드된 핵심 변화 사항을 비교합니다.</p>
   </div>
 
-  <div class="compare-wrap reveal delay-2">
+  <div class="compare-wrap-3 reveal delay-2">
     <div class="compare-col v1 reveal-left">
-      <div class="compare-version">Version 1 · 2025</div>
+      <div class="compare-version">Version 1 · 2025 상반기</div>
       <div class="compare-name">Nano Banana 1</div>
       <ul class="compare-list">
         <li><span class="ic ic-no">✗</span><span class="v1-text">최대 1K (1024×1024) 해상도</span></li>
@@ -780,6 +938,23 @@
         <li><span class="ic ic-no">✗</span><span class="v1-text">훈련 데이터만 활용</span></li>
         <li><span class="ic ic-no">✗</span><span class="v1-text">기본 스타일만 지원</span></li>
         <li><span class="ic ic-no">✗</span><span class="v1-text">8비트 색상</span></li>
+        <li><span class="ic ic-no">✗</span><span class="v1-text">Google 검색 미연동</span></li>
+      </ul>
+    </div>
+    <div class="compare-col vpro" style="position:relative;">
+      <div class="float-badge">⚡ 중간 단계</div>
+      <div class="compare-version">Pro · 2025 하반기</div>
+      <div class="compare-name">Nano Banana Pro</div>
+      <ul class="compare-list">
+        <li><span class="ic ic-yes">✓</span><span class="v2-text">최대 2K (2048×2048) 해상도</span></li>
+        <li><span class="ic ic-yes">✓</span><span class="v2-text">텍스트 렌더링 개선 (영문 위주)</span></li>
+        <li><span class="ic ic-yes">✓</span><span class="v2-text">4가지 비율 지원 추가</span></li>
+        <li><span class="ic ic-yes">✓</span><span class="v2-text">최대 5개 참조 이미지</span></li>
+        <li><span class="ic ic-no">✗</span><span class="v1-text">캐릭터 연속성 제한적</span></li>
+        <li><span class="ic ic-no">✗</span><span class="v1-text">훈련 데이터만 활용</span></li>
+        <li><span class="ic ic-yes">✓</span><span class="v2-text">8가지 아트 스타일 지원</span></li>
+        <li><span class="ic ic-yes">✓</span><span class="v2-text">12비트 색상</span></li>
+        <li><span class="ic ic-no">✗</span><span class="v1-text">Google 검색 미연동</span></li>
       </ul>
     </div>
     <div class="compare-col v2 reveal-right">
@@ -794,6 +969,7 @@
         <li><span class="ic ic-yes">✓</span><span class="v2-text">Google 검색 연동, 실시간 세계 지식</span></li>
         <li><span class="ic ic-yes">✓</span><span class="v2-text">20가지 전문 아트 스타일</span></li>
         <li><span class="ic ic-yes">✓</span><span class="v2-text">16비트 색상 + SynthID 워터마크</span></li>
+        <li><span class="ic ic-yes">✓</span><span class="v2-text">이중 AI 아키텍처 도입</span></li>
       </ul>
     </div>
   </div>
@@ -804,23 +980,24 @@
         <tr>
           <th>항목</th>
           <th>Nano Banana 1</th>
+          <th>Nano Banana Pro</th>
           <th>Nano Banana 2</th>
           <th>변화</th>
         </tr>
       </thead>
       <tbody>
-        <tr><td class="col-feat">기반 모델</td><td class="col-v1">Gemini 2.5 Flash Image</td><td class="col-v2">Gemini 3 Pro Image</td><td><span class="badge badge-rev">혁신</span></td></tr>
-        <tr><td class="col-feat">최대 해상도</td><td class="col-v1">1024×1024 (1K)</td><td class="col-v2">2048×2048 ~ 4K</td><td><span class="badge badge-up">4배↑</span></td></tr>
-        <tr><td class="col-feat">색상 지원</td><td class="col-v1">8비트</td><td class="col-v2">16비트</td><td><span class="badge badge-up">개선</span></td></tr>
-        <tr><td class="col-feat">텍스트 렌더링</td><td class="col-v1">부정확, 글자 깨짐</td><td class="col-v2">선명하고 정확, 다국어 지원</td><td><span class="badge badge-rev">혁신</span></td></tr>
-        <tr><td class="col-feat">가로세로비</td><td class="col-v1">주로 1:1</td><td class="col-v2">10가지 비율 지원</td><td><span class="badge badge-new">신규</span></td></tr>
-        <tr><td class="col-feat">참조 이미지</td><td class="col-v1">제한적 블렌딩</td><td class="col-v2">최대 14개 통합</td><td><span class="badge badge-up">대폭↑</span></td></tr>
-        <tr><td class="col-feat">주제 일관성</td><td class="col-v1">멀티 이미지 시 불일치</td><td class="col-v2">최대 5개 캐릭터 연속성</td><td><span class="badge badge-new">신규</span></td></tr>
-        <tr><td class="col-feat">추론 능력</td><td class="col-v1">기본 의미 이해</td><td class="col-v2">이중 AI 아키텍처</td><td><span class="badge badge-rev">혁신</span></td></tr>
-        <tr><td class="col-feat">실시간 데이터</td><td class="col-v1">훈련 데이터만</td><td class="col-v2">Google 검색 연동</td><td><span class="badge badge-new">신규</span></td></tr>
-        <tr><td class="col-feat">아트 스타일</td><td class="col-v1">기본 스타일</td><td class="col-v2">20가지 전문 스타일</td><td><span class="badge badge-new">신규</span></td></tr>
-        <tr><td class="col-feat">AI 식별</td><td class="col-v1">기본 메타데이터</td><td class="col-v2">SynthID + C2PA</td><td><span class="badge badge-new">신규</span></td></tr>
-        <tr><td class="col-feat">생성 속도</td><td class="col-v1">약 10초</td><td class="col-v2">동일 속도로 2K 생성</td><td><span class="badge badge-eff">효율화</span></td></tr>
+        <tr><td class="col-feat">기반 모델</td><td class="col-v1">Gemini 2.5 Flash</td><td class="col-v1">Gemini 2.5 Pro</td><td class="col-v2">Gemini 3 Pro Image</td><td><span class="badge badge-rev">혁신</span></td></tr>
+        <tr><td class="col-feat">최대 해상도</td><td class="col-v1">1K (1024px)</td><td class="col-v1">2K (2048px)</td><td class="col-v2">4K (4096px)</td><td><span class="badge badge-up">4배↑</span></td></tr>
+        <tr><td class="col-feat">색상 지원</td><td class="col-v1">8비트</td><td class="col-v1">12비트</td><td class="col-v2">16비트</td><td><span class="badge badge-up">개선</span></td></tr>
+        <tr><td class="col-feat">텍스트 렌더링</td><td class="col-v1">오류 빈번</td><td class="col-v1">영문 개선</td><td class="col-v2">다국어 완벽 지원</td><td><span class="badge badge-rev">혁신</span></td></tr>
+        <tr><td class="col-feat">가로세로비</td><td class="col-v1">1:1 위주</td><td class="col-v1">4가지 비율</td><td class="col-v2">10가지 비율</td><td><span class="badge badge-new">신규</span></td></tr>
+        <tr><td class="col-feat">참조 이미지</td><td class="col-v1">제한적</td><td class="col-v1">최대 5개</td><td class="col-v2">최대 14개</td><td><span class="badge badge-up">대폭↑</span></td></tr>
+        <tr><td class="col-feat">캐릭터 연속성</td><td class="col-v1">불일치</td><td class="col-v1">2개 제한</td><td class="col-v2">최대 5개</td><td><span class="badge badge-new">신규</span></td></tr>
+        <tr><td class="col-feat">추론 능력</td><td class="col-v1">기본</td><td class="col-v1">향상</td><td class="col-v2">이중 AI 아키텍처</td><td><span class="badge badge-rev">혁신</span></td></tr>
+        <tr><td class="col-feat">실시간 데이터</td><td class="col-v1">없음</td><td class="col-v1">없음</td><td class="col-v2">Google 검색 연동</td><td><span class="badge badge-new">신규</span></td></tr>
+        <tr><td class="col-feat">아트 스타일</td><td class="col-v1">기본</td><td class="col-v1">8가지</td><td class="col-v2">20가지</td><td><span class="badge badge-new">신규</span></td></tr>
+        <tr><td class="col-feat">AI 식별</td><td class="col-v1">기본 메타데이터</td><td class="col-v1">기본 메타데이터</td><td class="col-v2">SynthID + C2PA</td><td><span class="badge badge-new">신규</span></td></tr>
+        <tr><td class="col-feat">생성 속도</td><td class="col-v1">약 10초</td><td class="col-v1">약 10초 (2K)</td><td class="col-v2">동일 속도로 4K</td><td><span class="badge badge-eff">효율화</span></td></tr>
       </tbody>
     </table>
   </div>
@@ -1333,6 +1510,100 @@ Act as a trailer director + cinematographer + storyboard artist. Turn this refer
 </footer>
 
 <script>
+/* ── INTRO LOADER ── */
+const introLoader = document.getElementById('intro-loader');
+const introText = document.getElementById('intro-text');
+const introBar = document.getElementById('intro-bar');
+const introPct = document.getElementById('intro-pct');
+const TITLE = 'NANO BANANA 2';
+
+// 바나나 등장 후 텍스트 타이핑
+setTimeout(() => {
+  let i = 0;
+  const type = () => {
+    if (i < TITLE.length) {
+      const span = document.createElement('span');
+      span.textContent = TITLE[i] === ' ' ? '\u00a0' : TITLE[i];
+      span.style.animationDelay = (i * 0.06) + 's';
+      introText.appendChild(span);
+      i++; setTimeout(type, 60);
+    }
+  };
+  type();
+}, 600);
+
+// 프로그레스 바
+let pct = 0;
+const barInterval = setInterval(() => {
+  pct += Math.random() * 8 + 2;
+  if (pct >= 100) { pct = 100; clearInterval(barInterval); }
+  introBar.style.width = pct + '%';
+  introPct.textContent = Math.floor(pct) + '%';
+  if (pct >= 100) {
+    setTimeout(() => {
+      introLoader.classList.add('done');
+      setTimeout(() => { introLoader.style.display = 'none'; }, 1000);
+      // 진입 폭발 이펙트
+      triggerEntryBurst();
+      // 히어로 카운터 시작
+      startHeroCounters();
+    }, 300);
+  }
+}, 60);
+
+function triggerEntryBurst() {
+  const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
+  const colors = ['#f5a623','#e94560','#00d4ff','#a855f7','#00ff9d','#fff'];
+  // 쇼크웨이브 3개
+  [0, 150, 300].forEach(delay => {
+    setTimeout(() => {
+      const sw = document.createElement('div');
+      sw.className = 'shockwave';
+      sw.style.cssText = `left:${cx}px;top:${cy}px;`;
+      document.body.appendChild(sw);
+      setTimeout(() => sw.remove(), 900);
+    }, delay);
+  });
+  // 버스트 파티클 60개
+  for (let i = 0; i < 60; i++) {
+    setTimeout(() => {
+      const p = document.createElement('div');
+      p.className = 'burst-particle';
+      const angle = (Math.random() * 360) * Math.PI / 180;
+      const dist = 150 + Math.random() * 300;
+      const bx = Math.cos(angle) * dist + 'px';
+      const by = Math.sin(angle) * dist + 'px';
+      const size = 4 + Math.random() * 10;
+      p.style.cssText = `left:${cx}px;top:${cy}px;width:${size}px;height:${size}px;background:${colors[Math.floor(Math.random()*colors.length)]};--bx:${bx};--by:${by};animation-duration:${0.6+Math.random()*0.6}s;`;
+      document.body.appendChild(p);
+      setTimeout(() => p.remove(), 1200);
+    }, Math.random() * 200);
+  }
+  // 화면 플래시
+  const flash = document.createElement('div');
+  flash.style.cssText = 'position:fixed;inset:0;background:rgba(245,166,35,0.15);z-index:9988;pointer-events:none;animation:flash-out 0.4s ease both;';
+  const style = document.createElement('style');
+  style.textContent = '@keyframes flash-out{from{opacity:1}to{opacity:0}}';
+  document.head.appendChild(style);
+  document.body.appendChild(flash);
+  setTimeout(() => flash.remove(), 500);
+}
+
+function startHeroCounters() {
+  document.querySelectorAll('.hero-stat-num').forEach(el => {
+    const target = parseInt(el.dataset.target);
+    const suffix = el.dataset.suffix || '';
+    let cur = 0;
+    const step = () => {
+      cur += Math.ceil(target / 30);
+      if (cur >= target) { el.textContent = target + suffix; return; }
+      el.textContent = cur + suffix;
+      requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  });
+}
+
 /* ── CUSTOM CURSOR ── */
 const cursor = document.getElementById('cursor');
 const ring = document.getElementById('cursor-ring');
@@ -1459,6 +1730,38 @@ document.querySelectorAll('.btn-primary, .btn-secondary').forEach(btn => {
     btn.style.transform = `translate(${dx * 0.25}px, ${dy * 0.25}px) translateY(-3px) scale(1.02)`;
   });
   btn.addEventListener('mouseleave', () => { btn.style.transform = ''; });
+});
+
+/* ── 3D TILT CARDS ── */
+document.querySelectorAll('.prompt-card, .tip-card, .viral-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const dx = (e.clientX - cx) / (rect.width / 2);
+    const dy = (e.clientY - cy) / (rect.height / 2);
+    card.style.transform = `perspective(800px) rotateY(${dx*8}deg) rotateX(${-dy*8}deg) translateY(-6px) scale(1.02)`;
+    card.style.transition = 'transform 0.1s';
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = '';
+    card.style.transition = 'transform 0.5s cubic-bezier(0.16,1,0.3,1)';
+  });
+});
+
+/* ── CLICK BURST ── */
+document.addEventListener('click', e => {
+  if (e.target.closest('#intro-loader')) return;
+  const colors = ['#f5a623','#e94560','#00d4ff','#a855f7','#00ff9d'];
+  for (let i = 0; i < 12; i++) {
+    const p = document.createElement('div');
+    p.className = 'burst-particle';
+    const angle = (i / 12 * 360 + Math.random() * 30) * Math.PI / 180;
+    const dist = 40 + Math.random() * 80;
+    p.style.cssText = `left:${e.clientX}px;top:${e.clientY}px;width:5px;height:5px;background:${colors[i%colors.length]};--bx:${Math.cos(angle)*dist}px;--by:${Math.sin(angle)*dist}px;animation-duration:0.6s;`;
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 700);
+  }
 });
 
 /* ── COUNTER ANIMATION ── */
