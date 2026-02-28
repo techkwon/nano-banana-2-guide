@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nano Banana 2 완전 가이드 — 출시 변화 · 활용사례 · 프롬프트 총정리</title>
+  <meta name="description" content="Google Nano Banana 2 AI 이미지 생성 모델의 출시 변화, 실제 활용사례, 검증된 프롬프트를 카테고리별로 총정리한 가이드" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #1a1a2e;
+      --accent: #e94560;
+      --accent2: #0f3460;
+      --accent3: #533483;
+      --yellow: #f5a623;
+      --green: #27ae60;
+      --blue: #2980b9;
+      --purple: #8e44ad;
+      --bg: #f8f9fa;
+      --card: #ffffff;
+      --text: #1a1a2e;
+      --text-muted: #6c757d;
+      --border: #e9ecef;
+      --code-bg: #1e1e2e;
+      --radius: 12px;
+      --shadow: 0 4px 24px rgba(0,0,0,0.08);
+      --shadow-hover: 0 8px 40px rgba(0,0,0,0.14);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Noto Sans KR', 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(26,26,46,0.97);
+      backdrop-filter: blur(12px);
+      padding: 0 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 60px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .nav-logo {
+      font-size: 1.1rem; font-weight: 700; color: #fff;
+      text-decoration: none; letter-spacing: -0.3px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .nav-logo span { color: var(--yellow); }
+    .nav-links { display: flex; gap: 0; list-style: none; }
+    .nav-links a {
+      color: rgba(255,255,255,0.7); text-decoration: none;
+      padding: 0 14px; height: 60px; display: flex; align-items: center;
+      font-size: 0.85rem; font-weight: 500; transition: color 0.2s;
+      border-bottom: 2px solid transparent;
+    }
+    .nav-links a:hover { color: #fff; border-bottom-color: var(--yellow); }
+    .nav-badge {
+      background: var(--accent); color: #fff;
+      font-size: 0.7rem; padding: 2px 7px; border-radius: 20px;
+      font-weight: 700; margin-left: 6px;
+    }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%);
+      padding: 80px 2rem 60px;
+      text-align: center; position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 30% 50%, rgba(233,69,96,0.15) 0%, transparent 60%),
+                  radial-gradient(ellipse at 70% 30%, rgba(83,52,131,0.2) 0%, transparent 60%);
+    }
+    .hero-inner { position: relative; max-width: 800px; margin: 0 auto; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(245,166,35,0.15); border: 1px solid rgba(245,166,35,0.4);
+      color: var(--yellow); padding: 6px 16px; border-radius: 20px;
+      font-size: 0.8rem; font-weight: 600; margin-bottom: 24px;
+      letter-spacing: 0.5px;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 900;
+      color: #fff; line-height: 1.2; margin-bottom: 20px;
+      letter-spacing: -1px;
+    }
+    .hero h1 em { color: var(--yellow); font-style: normal; }
+    .hero p {
+      font-size: 1.05rem; color: rgba(255,255,255,0.75);
+      max-width: 600px; margin: 0 auto 36px;
+    }
+    .hero-stats {
+      display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;
+    }
+    .stat-pill {
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+      color: #fff; padding: 10px 20px; border-radius: 40px;
+      font-size: 0.9rem; font-weight: 600;
+    }
+    .stat-pill strong { color: var(--yellow); }
+
+    /* HERO IMAGE */
+    .hero-image-wrap {
+      max-width: 900px; margin: 48px auto 0;
+      border-radius: 16px; overflow: hidden;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .hero-image-wrap img { width: 100%; display: block; }
+
+    /* SECTION */
+    .section { padding: 72px 2rem; max-width: 1200px; margin: 0 auto; }
+    .section-header { margin-bottom: 48px; }
+    .section-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.75rem; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 12px;
+    }
+    .section-tag::before {
+      content: ''; width: 20px; height: 2px; background: var(--accent);
+    }
+    .section h2 {
+      font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 800;
+      color: var(--primary); letter-spacing: -0.5px; line-height: 1.3;
+    }
+    .section-desc {
+      margin-top: 12px; font-size: 1rem; color: var(--text-muted);
+      max-width: 640px;
+    }
+
+    /* DIVIDER */
+    .divider { border: none; border-top: 1px solid var(--border); margin: 0; }
+
+    /* CHANGE TABLE */
+    .change-table-wrap { overflow-x: auto; border-radius: var(--radius); box-shadow: var(--shadow); }
+    .change-table {
+      width: 100%; border-collapse: collapse;
+      background: var(--card); font-size: 0.9rem;
+    }
+    .change-table thead tr { background: var(--primary); }
+    .change-table thead th {
+      padding: 16px 20px; text-align: left;
+      color: #fff; font-weight: 600; font-size: 0.85rem;
+    }
+    .change-table thead th:first-child { border-radius: 12px 0 0 0; }
+    .change-table thead th:last-child { border-radius: 0 12px 0 0; }
+    .change-table tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
+    .change-table tbody tr:hover { background: #f8f9fa; }
+    .change-table tbody td { padding: 14px 20px; vertical-align: top; }
+    .change-table .col-feature { font-weight: 600; color: var(--primary); width: 18%; }
+    .change-table .col-v1 { color: var(--text-muted); width: 35%; }
+    .change-table .col-v2 { color: var(--primary); width: 35%; }
+    .change-table .col-badge { width: 12%; text-align: center; }
+    .badge {
+      display: inline-block; padding: 3px 10px; border-radius: 20px;
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.3px;
+    }
+    .badge-new { background: #d4edda; color: #155724; }
+    .badge-up { background: #cce5ff; color: #004085; }
+    .badge-rev { background: #f8d7da; color: #721c24; }
+    .badge-eff { background: #fff3cd; color: #856404; }
+
+    /* TIMELINE */
+    .timeline { position: relative; padding-left: 32px; }
+    .timeline::before {
+      content: ''; position: absolute; left: 10px; top: 0; bottom: 0;
+      width: 2px; background: linear-gradient(to bottom, var(--accent), var(--accent2));
+    }
+    .timeline-item { position: relative; margin-bottom: 36px; }
+    .timeline-dot {
+      position: absolute; left: -26px; top: 4px;
+      width: 14px; height: 14px; border-radius: 50%;
+      background: var(--accent); border: 3px solid #fff;
+      box-shadow: 0 0 0 2px var(--accent);
+    }
+    .timeline-date {
+      font-size: 0.78rem; font-weight: 700; color: var(--accent);
+      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;
+    }
+    .timeline-title { font-size: 1rem; font-weight: 700; color: var(--primary); margin-bottom: 6px; }
+    .timeline-body { font-size: 0.9rem; color: var(--text-muted); }
+
+    /* CASE GRID */
+    .case-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 24px;
+    }
+    .case-card {
+      background: var(--card); border-radius: var(--radius);
+      box-shadow: var(--shadow); overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+      border: 1px solid var(--border);
+    }
+    .case-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+    .case-card-img {
+      width: 100%; height: 220px; object-fit: cover; display: block;
+      background: #eee;
+    }
+    .case-card-body { padding: 20px; }
+    .case-card-tag {
+      display: inline-block; padding: 3px 10px; border-radius: 20px;
+      font-size: 0.72rem; font-weight: 700; margin-bottom: 10px;
+    }
+    .tag-figure { background: #e8d5ff; color: #6c3483; }
+    .tag-fashion { background: #fde8f0; color: #c0392b; }
+    .tag-editing { background: #d5f5e3; color: #1e8449; }
+    .tag-marketing { background: #d6eaf8; color: #1a5276; }
+    .tag-anime { background: #fef9e7; color: #9a7d0a; }
+    .tag-food { background: #fdebd0; color: #935116; }
+    .tag-arch { background: #eaf2ff; color: #1a5276; }
+    .tag-brand { background: #f4ecf7; color: #6c3483; }
+    .tag-social { background: #e8f8f5; color: #1e8449; }
+    .tag-viral { background: #fdedec; color: #922b21; }
+    .case-card h3 { font-size: 1rem; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
+    .case-card p { font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 14px; }
+    .case-card-prompt {
+      background: var(--code-bg); border-radius: 8px;
+      padding: 12px 14px; font-size: 0.78rem;
+      color: #a8d8a8; font-family: 'Courier New', monospace;
+      line-height: 1.5; overflow: hidden;
+      max-height: 80px; position: relative;
+    }
+    .case-card-prompt::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+      height: 30px; background: linear-gradient(transparent, var(--code-bg));
+    }
+    .case-source {
+      margin-top: 12px; font-size: 0.75rem; color: var(--text-muted);
+      display: flex; align-items: center; gap: 4px;
+    }
+
+    /* PROMPT SECTION */
+    .prompt-categories { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 32px; }
+    .prompt-cat-btn {
+      padding: 8px 18px; border-radius: 24px; border: 1.5px solid var(--border);
+      background: var(--card); color: var(--text-muted);
+      font-size: 0.85rem; font-weight: 600; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .prompt-cat-btn.active, .prompt-cat-btn:hover {
+      background: var(--primary); color: #fff; border-color: var(--primary);
+    }
+    .prompt-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 20px;
+    }
+    .prompt-card {
+      background: var(--card); border-radius: var(--radius);
+      border: 1px solid var(--border); padding: 24px;
+      box-shadow: var(--shadow);
+    }
+    .prompt-card-header {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      margin-bottom: 14px; gap: 12px;
+    }
+    .prompt-card h3 { font-size: 0.95rem; font-weight: 700; color: var(--primary); }
+    .prompt-card-desc { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px; line-height: 1.6; }
+    .prompt-block {
+      background: var(--code-bg); border-radius: 8px;
+      padding: 14px 16px; font-size: 0.78rem;
+      color: #a8d8a8; font-family: 'Courier New', monospace;
+      line-height: 1.6; position: relative;
+    }
+    .copy-btn {
+      position: absolute; top: 8px; right: 8px;
+      background: rgba(255,255,255,0.1); border: none;
+      color: rgba(255,255,255,0.6); padding: 4px 10px;
+      border-radius: 6px; font-size: 0.72rem; cursor: pointer;
+      transition: background 0.2s;
+    }
+    .copy-btn:hover { background: rgba(255,255,255,0.2); color: #fff; }
+    .prompt-result {
+      margin-top: 12px; font-size: 0.8rem; color: var(--text-muted);
+      padding: 10px 14px; background: #f8f9fa; border-radius: 8px;
+      border-left: 3px solid var(--green);
+    }
+    .prompt-result strong { color: var(--green); }
+
+    /* TIPS GRID */
+    .tips-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .tip-card {
+      background: var(--card); border-radius: var(--radius);
+      padding: 24px; border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+    .tip-num {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--primary); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem; font-weight: 800; margin-bottom: 14px;
+    }
+    .tip-card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 8px; }
+    .tip-card p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* COMPARISON */
+    .compare-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+    }
+    .compare-card {
+      background: var(--card); border-radius: var(--radius);
+      padding: 28px; border: 2px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+    .compare-card.v2 { border-color: var(--accent); }
+    .compare-card h3 {
+      font-size: 1.1rem; font-weight: 800; margin-bottom: 20px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .compare-card.v2 h3 { color: var(--accent); }
+    .compare-list { list-style: none; }
+    .compare-list li {
+      padding: 10px 0; border-bottom: 1px solid var(--border);
+      font-size: 0.88rem; display: flex; align-items: flex-start; gap: 10px;
+    }
+    .compare-list li:last-child { border-bottom: none; }
+    .compare-list .icon { flex-shrink: 0; margin-top: 2px; }
+    .icon-x { color: #e74c3c; }
+    .icon-check { color: var(--green); }
+
+    /* VIRAL SECTION */
+    .viral-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .viral-card {
+      background: var(--card); border-radius: var(--radius);
+      overflow: hidden; box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      transition: transform 0.2s;
+    }
+    .viral-card:hover { transform: translateY(-3px); }
+    .viral-card img { width: 100%; height: 200px; object-fit: cover; }
+    .viral-card-body { padding: 16px; }
+    .viral-card h4 { font-size: 0.9rem; font-weight: 700; margin-bottom: 6px; }
+    .viral-card p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+    .viral-card-meta {
+      margin-top: 10px; font-size: 0.75rem; color: var(--text-muted);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .viral-platform {
+      background: var(--bg); padding: 2px 8px; border-radius: 4px;
+      font-weight: 600; font-size: 0.72rem;
+    }
+
+    /* QUOTE */
+    .quote-block {
+      background: var(--card); border-radius: var(--radius);
+      padding: 28px 32px; border-left: 4px solid var(--accent);
+      box-shadow: var(--shadow); margin-bottom: 20px;
+    }
+    .quote-text { font-size: 1rem; color: var(--primary); line-height: 1.7; font-style: italic; }
+    .quote-author { margin-top: 12px; font-size: 0.82rem; color: var(--text-muted); font-weight: 600; }
+
+    /* DARK SECTION */
+    .dark-section {
+      background: var(--primary); color: #fff;
+      padding: 72px 2rem;
+    }
+    .dark-section .section { margin: 0 auto; }
+    .dark-section .section h2 { color: #fff; }
+    .dark-section .section-desc { color: rgba(255,255,255,0.65); }
+    .dark-section .section-tag { color: var(--yellow); }
+    .dark-section .section-tag::before { background: var(--yellow); }
+
+    /* FOOTER */
+    footer {
+      background: #111; color: rgba(255,255,255,0.5);
+      padding: 40px 2rem; text-align: center;
+      font-size: 0.82rem;
+    }
+    footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
+    footer a:hover { color: #fff; }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .compare-grid { grid-template-columns: 1fr; }
+      .case-grid, .prompt-grid, .viral-grid { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 1.8rem; }
+    }
+
+    /* ANCHOR OFFSET */
+    [id] { scroll-margin-top: 70px; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">Nano <span>Banana</span> 2</a>
+  <ul class="nav-links">
+    <li><a href="#changes">출시 변화</a></li>
+    <li><a href="#cases">활용사례 <span class="nav-badge">50+</span></a></li>
+    <li><a href="#prompts">프롬프트</a></li>
+    <li><a href="#viral">바이럴</a></li>
+    <li><a href="#tips">작성 팁</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">🍌 2026 최신 업데이트 · Google Gemini 기반</div>
+    <h1>Nano Banana 2<br /><em>실전 활용 완전 가이드</em></h1>
+    <p>출시 변화부터 50개 이상의 실제 사용 사례, 검증된 프롬프트까지 — 커뮤니티가 발굴한 모든 것을 한 곳에 정리했습니다.</p>
+    <div class="hero-stats">
+      <div class="stat-pill"><strong>50+</strong> 실제 사례</div>
+      <div class="stat-pill"><strong>30+</strong> 검증 프롬프트</div>
+      <div class="stat-pill"><strong>10</strong> 카테고리</div>
+      <div class="stat-pill"><strong>4K</strong> 해상도 지원</div>
+    </div>
+  </div>
+  <div class="hero-image-wrap" style="max-width:900px;margin:48px auto 0;">
+    <img src="images/hero_nb2.png" alt="Nano Banana 2 소개" loading="lazy" />
+  </div>
+</section>
+
+<!-- CHANGES -->
+<div id="changes">
+<div class="section">
+  <div class="section-header">
+    <div class="section-tag">Category 01</div>
+    <h2>Nano Banana 1 → 2, 무엇이 달라졌나</h2>
+    <p class="section-desc">Gemini 3 Pro Image 기반으로 전면 업그레이드된 핵심 변화 사항을 비교합니다.</p>
+  </div>
+
+  <div class="compare-grid" style="margin-bottom:48px;">
+    <div class="compare-card">
+      <h3>🍌 Nano Banana 1 <span style="font-size:0.75rem;color:var(--text-muted);font-weight:400;">2025</span></h3>
+      <ul class="compare-list">
+        <li><span class="icon icon-x">✗</span> 최대 1K (1024×1024) 해상도</li>
+        <li><span class="icon icon-x">✗</span> 텍스트 렌더링 오류 빈번</li>
+        <li><span class="icon icon-x">✗</span> 1:1 비율 위주</li>
+        <li><span class="icon icon-x">✗</span> 참조 이미지 제한적</li>
+        <li><span class="icon icon-x">✗</span> 멀티 이미지 일관성 부족</li>
+        <li><span class="icon icon-x">✗</span> 훈련 데이터만 활용</li>
+        <li><span class="icon icon-x">✗</span> 기본 스타일만 지원</li>
+        <li><span class="icon icon-x">✗</span> 8비트 색상</li>
+      </ul>
+    </div>
+    <div class="compare-card v2">
+      <h3>🍌🍌 Nano Banana 2 <span style="font-size:0.75rem;color:var(--accent);font-weight:600;">2026 NEW</span></h3>
+      <ul class="compare-list">
+        <li><span class="icon icon-check">✓</span> 최대 4K (4096×4096) 해상도</li>
+        <li><span class="icon icon-check">✓</span> 선명하고 정확한 텍스트, 다국어 지원</li>
+        <li><span class="icon icon-check">✓</span> 10가지 비율 지원 (16:9, 9:16, 4:3 등)</li>
+        <li><span class="icon icon-check">✓</span> 최대 14개 참조 이미지 통합</li>
+        <li><span class="icon icon-check">✓</span> 최대 5개 캐릭터 연속성 유지</li>
+        <li><span class="icon icon-check">✓</span> Google 검색 연동, 실시간 세계 지식</li>
+        <li><span class="icon icon-check">✓</span> 20가지 전문 아트 스타일</li>
+        <li><span class="icon icon-check">✓</span> 16비트 색상 + SynthID 워터마크</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="change-table-wrap">
+    <table class="change-table">
+      <thead>
+        <tr>
+          <th>항목</th>
+          <th>Nano Banana 1</th>
+          <th>Nano Banana 2</th>
+          <th>변화</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-feature">기반 모델</td>
+          <td class="col-v1">Gemini 2.5 Flash Image</td>
+          <td class="col-v2">Gemini 3 Pro Image</td>
+          <td class="col-badge"><span class="badge badge-rev">혁신</span></td>
+        </tr>
+        <tr>
+          <td class="col-feature">최대 해상도</td>
+          <td class="col-v1">1024×1024 (1K)</td>
+          <td class="col-v2">2048×2048 (2K) ~ 4K</td>
+          <td class="col-badge"><span class="badge badge-up">4배↑</span></td>
+        </tr>
+        <tr>
+          <td class="col-feature">색상 지원</td>
+          <td class="col-v1">8비트 색상</td>
+          <td class="col-v2">16비트 색상</td>
+          <td class="col-badge"><span class="badge badge-up">개선</span></td>
+        </tr>
+        <tr>
+          <td class="col-feature">텍스트 렌더링</td>
+          <td class="col-v1">부정확, 글자 깨짐 빈번</td>
+          <td class="col-v2">선명하고 정확한 텍스트, 다국어 지원</td>
+          <td class="col-badge"><span class="badge badge-rev">혁신</span></td>
+        </tr>
+        <tr>
+          <td class="col-feature">가로세로비</td>
+          <td class="col-v1">주로 1:1 (정사각형)</td>
+          <td class="col-v2">10가지 비율 지원 (16:9, 9:16, 4:3 등)</td>
+          <td class="col-badge"><span class="badge badge-new">신규</span></td>
+        </tr>
+        <tr>
+          <td class="col-feature">참조 이미지</td>
+          <td class="col-v1">제한적 이미지 블렌딩</td>
+          <td class="col-v2">최대 14개 참조 이미지 통합</td>
+          <td class="col-badge"><span class="badge badge-up">대폭↑</span></td>
+        </tr>
+        <tr>
+          <td class="col-feature">주제 일관성</td>
+          <td class="col-v1">멀티 이미지 시 불일치</td>
+          <td class="col-v2">최대 5개 캐릭터 연속성 유지</td>
+          <td class="col-badge"><span class="badge badge-new">신규</span></td>
+        </tr>
+        <tr>
+          <td class="col-feature">추론 능력</td>
+          <td class="col-v1">기본 의미 이해</td>
+          <td class="col-v2">이중 시스템 아키텍처 (추론 AI + 확산 모델)</td>
+          <td class="col-badge"><span class="badge badge-rev">혁신</span></td>
+        </tr>
+        <tr>
+          <td class="col-feature">실시간 데이터</td>
+          <td class="col-v1">훈련 데이터만 활용</td>
+          <td class="col-v2">Google 검색 연동, 실시간 세계 지식</td>
+          <td class="col-badge"><span class="badge badge-new">신규</span></td>
+        </tr>
+        <tr>
+          <td class="col-feature">아트 스타일</td>
+          <td class="col-v1">기본 스타일</td>
+          <td class="col-v2">20가지 전문 스타일 지원</td>
+          <td class="col-badge"><span class="badge badge-new">신규</span></td>
+        </tr>
+        <tr>
+          <td class="col-feature">AI 식별</td>
+          <td class="col-v1">기본 메타데이터</td>
+          <td class="col-v2">SynthID 워터마크 + C2PA 콘텐츠 자격증명</td>
+          <td class="col-badge"><span class="badge badge-new">신규</span></td>
+        </tr>
+        <tr>
+          <td class="col-feature">생성 속도</td>
+          <td class="col-v1">약 10초</td>
+          <td class="col-v2">약 10초 (동일 속도로 2K 생성)</td>
+          <td class="col-badge"><span class="badge badge-eff">효율화</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="margin-top:48px;">
+    <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:24px;color:var(--primary);">출시 타임라인</h3>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-date">2025년 상반기</div>
+        <div class="timeline-title">Nano Banana 1 출시</div>
+        <div class="timeline-body">Gemini 2.5 Flash Image 기반. 1K 해상도, 기본 이미지 생성 기능 제공. AI 이미지 생성의 대중화를 이끌었으나 텍스트 렌더링 한계 존재.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot" style="background:var(--accent2);box-shadow:0 0 0 2px var(--accent2);"></div>
+        <div class="timeline-date">2025년 하반기</div>
+        <div class="timeline-title">Nano Banana Pro 출시</div>
+        <div class="timeline-body">고급 기능 선행 제공. 텍스트 렌더링 개선, 고해상도 지원 시작. 피규어 트렌드가 전 세계적으로 바이럴 확산.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot" style="background:var(--accent3);box-shadow:0 0 0 2px var(--accent3);"></div>
+        <div class="timeline-date">2026년 초</div>
+        <div class="timeline-title">Nano Banana 2 공식 출시</div>
+        <div class="timeline-body">Gemini 3 Pro Image 기반으로 전면 업그레이드. 4K 해상도, 20가지 스타일, 실시간 Google 검색 연동, 이중 AI 아키텍처 도입. 패션 가상 착용, 3D 렌더링 등 전문 분야 확장.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot" style="background:var(--green);box-shadow:0 0 0 2px var(--green);"></div>
+        <div class="timeline-date">2026년 2월</div>
+        <div class="timeline-title">슬라이드 편집 기능 추가</div>
+        <div class="timeline-body">AI 생성 슬라이드의 텍스트 및 시각 요소 편집 기능 도입. 대량 편집 지원으로 프레젠테이션 워크플로우 혁신. 기업용 활용 급증.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<hr class="divider" />
+
+<!-- CASES -->
+<div id="cases">
+<div class="section">
+  <div class="section-header">
+    <div class="section-tag">Category 02</div>
+    <h2>실제 활용사례 — 카테고리별 총정리</h2>
+    <p class="section-desc">커뮤니티와 실제 사용자들이 검증한 50개 이상의 활용사례를 분야별로 정리했습니다.</p>
+  </div>
+
+  <!-- 피규어 & 굿즈 -->
+  <h3 style="font-size:1.1rem;font-weight:800;color:var(--primary);margin-bottom:20px;padding-bottom:10px;border-bottom:2px solid var(--border);">🎭 피규어 & 굿즈 디자인</h3>
+  <div class="case-grid" style="margin-bottom:48px;">
+    <div class="case-card">
+      <img class="case-card-img" src="images/figure_desk.jpg" alt="1/7 스케일 피규어" loading="lazy" />
+      <div class="case-card-body">
+        <span class="case-card-tag tag-figure">피규어</span>
+        <h3>1/7 스케일 수집용 피규어</h3>
+        <p>캐릭터 일러스트를 실제 상업용 피규어처럼 표현. 컴퓨터 책상 위 배치로 현실감 극대화. ZBrush 모델링 화면과 BANDAI 스타일 박스 포함.</p>
+        <div class="case-card-prompt">A commercialized 1/7 scale figure of the character in the illustration, in a realistic style and environment. Use a circular transparent acrylic base with no text, placed on a computer desk. Display the figure's ZBrush modeling process on the computer screen.</div>
+        <div class="case-source">📌 Reddit r/ChatGPTPromptGenius · 수천 개 업보트</div>
+      </div>
+    </div>
+    <div class="case-card">
+      <img class="case-card-img" src="images/figure_box.jpg" alt="액션 피규어 토이 박스" loading="lazy" />
+      <div class="case-card-body">
+        <span class="case-card-tag tag-figure">피규어</span>
+        <h3>액션 피규어 토이 박스</h3>
+        <p>사용자 사진을 기반으로 한 수집용 액션 피규어. 투명 플라스틱 창, 대담한 그래픽, 이름이 인쇄된 장난감 상자 안에 전시. 장난감 가게 선반 연출.</p>
+        <div class="case-card-prompt">Take this photo and turn me into a collectible action figure inside a toy box. The box should include a clear plastic window, bold graphics, and my name on the packaging. Style the figurine in a fun, toy-like way but keep my likeness recognizable.</div>
+        <div class="case-source">📌 Tom's Guide · 바이럴 트렌드</div>
+      </div>
+    </div>
+    <div class="case-card">
+      <img class="case-card-img" src="images/celeb_figure.webp" alt="펀코 팝 피규어" loading="lazy" />
+      <div class="case-card-body">
+        <span class="case-card-tag tag-figure">피규어</span>
+        <h3>펀코 팝 스타일 피규어</h3>
+        <p>실제 인물 사진을 치비 스타일 펀코 팝 피규어로 변환. 인물의 외모, 헤어스타일, 의상 정확 반영. 스튜디오 조명, 순백색 배경으로 제품 사진 품질 구현.</p>
+        <div class="case-card-prompt">Create a detailed 3D rendering of a chibi Funko Pop figure based on the provided reference photo. The figure should accurately reflect the person's appearance, hairstyle, outfit, and distinctive style from the photo. High detail, studio lighting, photorealistic texture, pure white background.</div>
+        <div class="case-source">📌 Republic World · 셀럽 피규어 트렌드</div>
+      </div>
+    </div>
+    <div class="case-card">
+      <div class="case-card-body" style="padding-top:24px;">
+        <span class="case-card-tag tag-figure">피규어</span>
+        <h3>치비 니트 인형 (손뜨개 스타일)</h3>
+        <p>캐릭터를 손뜨개 인형으로 표현. 두 손에 안겨 있는 클로즈업 구도, 따뜻한 창문 자연광, 코지한 실내 분위기. 피부 질감과 손가락 움직임까지 사실적으로 표현.</p>
+        <div class="case-card-prompt">A professionally photographed close-up of a hand-knitted doll gently cradled in two hands. The doll features a round form with a cute chibi image of [CHARACTER], with vivid color contrast and rich detail. The hands holding the doll are natural and soft, with clear finger movements, natural skin texture.</div>
+        <div class="case-source">📌 Fotor Blog · 인기 프롬프트 TOP 10</div>
+      </div>
+    </div>
+    <div class="case-card">
+      <div class="case-card-body" style="padding-top:24px;">
+        <span class="case-card-tag tag-figure">피규어</span>
+        <h3>봉제 인형 (플러시 토이)</h3>
+        <p>캐릭터를 고품질 봉제 인형으로 변환. 큰 머리, 작은 몸, 짧은 팔다리의 치비 비율. 보풀 있는 천, 바느질 자국, 자수된 얼굴 특징으로 실제 수집용 인형 품질 구현.</p>
+        <div class="case-card-prompt">A soft, high-quality plush toy of the character in the image, with an oversized head, small body, and stubby limbs. Made of fuzzy fabric with visible stitching and embroidered facial features. The plush is shown sitting against a neutral background with soft, even lighting.</div>
+        <div class="case-source">📌 Reddit · POD 상품 제작 활용</div>
+      </div>
+    </div>
+    <div class="case-card">
+      <div class="case-card-body" style="padding-top:24px;">
+        <span class="case-card-tag tag-figure">피규어</span>
+        <h3>프리미엄 애니메이션 피규어</h3>
+        <p>역동적인 포즈, 세부 의상 질감, 생생한 색상의 프리미엄 애니메이션 피규어. LED 조명 수집가용 진열장에 투명 아크릴 선반 위 연출. 원본 캐릭터 아트워크 포스터 배경 포함.</p>
+        <div class="case-card-prompt">Transform this into a premium anime figure with dynamic pose, detailed clothing textures, and vibrant colors. Place it in a collector's display case with LED lighting, surrounded by other anime figures on transparent acrylic shelves. Include the original character artwork poster in the background.</div>
+        <div class="case-source">📌 Reddit r/AIArt · 수집가 커뮤니티</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 패션 & 가상 착용 -->
+  <h3 style="font-size:1.1rem;font-weight:800;color:var(--primary);margin-bottom:20px;padding-bottom:10px;border-bottom:2px solid var(--border);">👗 패션 & 가상 착용 (Virtual Try-On)</h3>
+  <div class="case-grid" style="margin-bottom:48px;">
+    <div class="case-card">
+      <img class="case-card-img" src="images/fashion_tryon.jpg" alt="패션 가상 착용" loading="lazy" />
+      <div class="case-card-body">
+        <span class="case-card-tag tag-fashion">패션</span>
+        <h3>이브닝 가운 가상 착용</h3>
+        <p>은회색 오프숄더 이브닝 가운을 사진 속 인물에게 자연스럽게 착용. 원본 조명과 신체 비율 유지. 웨딩·갈라 행사용 스타일링 시뮬레이션에 활용.</p>
+        <div class="case-card-prompt">Apply elegant silver-gray off-shoulder evening gown onto the woman. The gown features a fitted bodice with off-shoulder neckline, flowing A-line skirt to floor length. Fabric has subtle sheen and natural draping. Maintain the warm indoor ballroom lighting with golden ambient glow.</div>
+        <div class="case-source">📌 nano2image.com · 가상 착용 플랫폼</div>
+      </div>
+    </div>
+    <div class="case-card">
+      <img class="case-card-img" src="images/fashion_multi.jpg" alt="패션 다중 스타일" loading="lazy" />
+      <div class="case-card-body">
+        <span class="case-card-tag tag-fashion">패션</span>
+        <h3>다중 의상 스타일 일관성 유지</h3>
+        <p>동일 인물에게 여러 의상을 적용하면서 얼굴·체형 일관성 유지. 패션 브랜드의 룩북 제작, 이커머스 상품 이미지 대량 생성에 활용. NB2의 멀티 참조 이미지 기능 핵심 활용 사례.</p>
+        <div class="case-card-prompt">Maintain the exact same model appearance across all outfit variations. Replace only the clothing with [outfit description] while keeping identical face, body proportions, skin tone, and pose. Use consistent studio lighting throughout all variations.</div>
+        <div class="case-source">📌 Tom's Guide 실험 · 일관성 테스트</div>
+      </div>
+    </div>
+    <div class="case-card">
+      <div class="case-card-body" style="padding-top:24px;">
+        <span class="case-card-tag tag-fashion">패션</span>
+        <h3>에메랄드 그린 포멀 가운</h3>
+        <p>긴 소매와 V넥 라인의 에메랄드 그린 포멀 가운으로 변환. 바닥 길이의 흐르는 스커트, 새틴 광택 표현. 원본 배경과 로맨틱한 분위기 보존하여 자연스러운 합성.</p>
+        <div class="case-card-prompt">Transform into luxurious emerald green formal gown with long sleeves and V-neckline. Floor-length flowing skirt with elegant draping and movement. Rich jewel-tone green color with subtle satin sheen. Adapt to warm indoor event lighting for depth and dimension.</div>
+        <div class="case-source">📌 SellerPic.ai · 이커머스 활용</div>
+      </div>
+    </div>
+    <div class="case-card">
+      <div class="case-card-body" style="padding-top:24px;">
+        <span class="case-card-tag tag-fashion">패션</span>
+        <h3>스트리트웨어 룩북 제작</h3>
+        <p>오버사이즈 후드티, 카고 팬츠, 스니커즈 조합의 스트리트웨어 룩. 도시 배경과 자연스러운 포즈 연출. 인스타그램 패션 계정용 콘텐츠 대량 생성에 활용.</p>
+        <div class="case-card-prompt">Dress the model in a streetwear outfit: oversized graphic hoodie in washed black, baggy cargo pants with chain detail, and chunky white sneakers. Urban background with graffiti wall. Casual, confident pose. Natural daylight, slight film grain aesthetic.</div>
+        <div class="case-source">📌 Instagram 패션 크리에이터 활용 사례</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 이미지 편집 -->
+  <h3 style="font-size:1.1rem;font-weight:800;color:var(--primary);margin-bottom:20px;padding-bottom:10px;border-bottom:2px solid var(--border);">🖼️ 이미지 편집 & 변환</h3>
+  <div class="case-grid" style="margin-bottom:48px;">
+    <div class="case-card">
+      <img class="case-card-img" src="images/photo_editing.png" alt="포토 편집" loading="lazy" />
+      <div class="case-card-body">
+        <span class="case-card-tag tag-editing">편집</span>
+        <h3>객체 제거 (Object Removal)</h3>
+        <p>이미지에서 특정 객체(석고 흉상 등)를 자연스럽게 제거. 원본 스타일, 조명, 구도 완벽 유지. 배경 복원 품질이 Photoshop 수준에 근접하다는 평가.</p>
+        <div class="case-card-prompt">Remove the stone bust from the foreground to create a clean, unobstructed view of the model and the garden. Keep everything else in the image exactly the same, preserving the original style, lighting, and composition.</div>
+        <div class="case-source">📌 Max Woolf's Blog · Photoshop 비교 실험</div>
+      </div>
+    </div>
+    <div class="case-card">
+      <div class="case-card-body" style="padding-top:24px;">
+        <span class="case-card-tag tag-editing">편집</span>
+        <h3>배경 교체 (Background Swap)</h3>
+        <p>피사체의 배경을 사실적인 도시 일몰 스카이라인으로 교체. 피사체와의 그림자·주변광 상호작용 자연스럽게 유지. 인물 사진의 배경을 원하는 장소로 즉시 변경.</p>
+        <div class="case-card-prompt">Replace the background with a realistic urban sunset skyline. Maintain proper shadow and ambient light interaction with the subject. The lighting on the subject should match the warm golden hour light from the new background.</div>
+        <div class="case-source">📌 CNET 리뷰 · 실용성 테스트</div>
+      </div>
+    </div>
+    <div class="case-card">
+      <div class="case-card-body" style="padding-top:24px;">
+        <span class="case-card-tag tag-editing">편집</span>
+        <h3>스타일 변환 (Style Transfer)</h3>
+        <p>이미지를 세련된 미니멀 미래주의 스타일로 변환. 유기적 질감을 매끄러운 흰색 폴리머와 크롬으로 대체. 차갑고 무균적인 실험실 조명 적용. 구성과 위치는 원본 유지.</p>
+        <div class="case-card-prompt">Transform this image into a sleek, minimalist futuristic style. Replace all organic textures with smooth white polymer and chrome. Apply cold, sterile laboratory white lighting. Maintain the exact same composition and positioning of all objects.</div>
+        <div class="case-source">📌 Reddit r/singularity · 스타일 변환 실험</div>
+      </div>
+    </div>
+    <div class="case-card">
+      <div class="case-card-body" style="padding-top:24px;">
+        <span class="case-card-tag tag-editing">편집</span>
+        <h3>흑백 → 컬러 복원</h3>
+        <p>오래된 흑백 사진을 자연스러운 컬러로 복원. 시대적 맥락을 고려한 색상 선택. 피부 톤, 의상, 배경의 역사적 정확성 유지. 가족 사진 복원에 활용.</p>
+        <div class="case-card-prompt">Colorize this black and white photograph with historically accurate colors. Use natural, realistic skin tones. Consider the era of the photo for clothing and environment colors. Preserve all details and textures while adding natural color.</div>
+        <div class="case-source">📌 YouTube 튜토리얼 · 복원 사례</div>
+      </div>
+    </div>
+    <div class="case-card">
+      <div class="case-card-body" style="padding-top:24px;">
+        <span class="case-card-tag tag-editing">편집</span>
+        <h3>거대화 합성 (Giant Person)</h3>
+        <p>뉴욕시 배경에 거대한 인물이 자동차 위를 걷는 극단적 로우앵글 사진. 스케일 강조를 위해 작은 사람들과 자동차 배치. 한낮의 태양 조명으로 사실적 표현.</p>
+        <div class="case-card-prompt">A highly detailed, photorealistic extreme low-angle looking up shot showing a colossal person positioned in New York City. The giant is stepping over cars. To establish the immense scale, tiny people and cars are visible near their feet. The lighting is midday sun.</div>
+        <div class="case-source">📌 Reddit · 바이럴 합성 사례</div>
+      </div>
+    </div>
+    <div class="case-card">
+      <div class="case-card-body" style="padding-top:24px;">
+        <span class="case-card-tag tag-editing">편집</span>
+        <h3>영화 캐릭터와 셀카</h3>
+        <p>좋아하는 영화 캐릭터와 함께 셀카를 찍는 듯한 이미지 생성. 히스 레저 조커와의 배트맨 세트장 셀카 사례로 바이럴. 얼굴 특징 100% 동일 유지 기술 활용.</p>
+        <div class="case-card-prompt">I'm taking a selfie with [movie character] on the set of [movie name]. Keep the person exactly as shown in the reference image with 100% identical facial features, bone structure, skin tone, facial expression, pose, and appearance.</div>
+        <div class="case-source">📌 rohanpaul_ai Twitter · 바이럴 사례</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 마케팅 & 인포그래픽 -->
+  <h3 style="font-size:1.1rem;font-weight:800;color:var(--primary);margin-bottom:20px;padding-bottom:10px;border-bottom:2px solid var(--border);">📊 마케팅 & 인포그래픽</h3>
+  <div class="case-grid" style="margin-bottom:48px;">
+    <div class="case-card">
+      <div class="case-card-body" style="padding-top:24px;">
+        <span class="case-card-tag tag-marketing">마케팅</span>
+        <h3>데이터 인포그래픽</h3>
+        <p>복잡한 통계 데이터를 아이콘, 도형, 텍스트로 정리한 인포그래픽. 타워브릿지 건축 정보, 기업 성과 지표 등 다양한 분야에 활용. 텍스트 렌더링 개선으로 NB2에서 품질 대폭 향상.</p>
+        <div class="case-card-prompt">Create a professional infographic about [topic]. Use a clean, modern design with icons, charts, and statistics. Color scheme: [colors]. Include a title, 5-7 key data points with visual representations, and a source citation at the bottom. Style: corporate, minimal.</div>
+        <div class="case-source">📌 LinkedIn 마케터 커뮤니티</div>
+      </div>
+    </div>
+    <div class="case-card">
+      <div class="case-card-body" style="padding-top:24px;">
+        <span class="case-card-tag tag-marketing">마케팅</span>
+        <h3>제품 광고 배너</h3>
+        <p>간판, 로고, 광고판 등 텍스트가 포함된 브랜드 이미지 정확 생성. 기업 광고 소재, 마케팅 배너 제작. NB2의 텍스트 렌더링 혁신으로 한글 광고 문구도 정확하게 표현.</p>
+        <div class="case-card-prompt">Create a product advertisement banner for [product name]. Include the product image prominently, brand logo in top-left corner, tagline "[tagline]" in bold typography, and a call-to-action button. Background: gradient from [color1] to [color2]. Professional, clean design.</div>
+        <div class="case-source">📌 이커머스 셀러 커뮤니티</div>
+      </div>
+    </div>
+    <div class="case-card">
+      <div class="case-card-body" style="padding-top:24px;">
+        <span class="case-card-tag tag-marketing">마케팅</span>
+        <h3>소셜미디어 카드뉴스</h3>
+        <p>LinkedIn, Instagram, TikTok 플랫폼별 최적화된 이미지 생성. 영감 인용문 카드, 팁 카드, 통계 카드 등 다양한 형식. 브랜드 컬러와 폰트 일관성 유지하여 시리즈 제작.</p>
+        <div class="case-card-prompt">Create an Instagram carousel slide for [topic]. Design: modern, minimal. Include a bold headline, 3-4 bullet points with icons, brand colors [hex codes]. Size: 1080x1080px. Style: professional but approachable. Add subtle gradient background.</div>
+        <div class="case-source">📌 소셜미디어 크리에이터 사례</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 애니메이션 & 일러스트 -->
+  <h3 style="font-size:1.1rem;font-weight:800;color:var(--primary);margin-bottom:20px;padding-bottom:10px;border-bottom:2px solid var(--border);">🎨 애니메이션 & 일러스트</h3>
+  <div class="case-grid" style="margin-bottom:48px;">
+    <div class="case-card">
+      <div class="case-card-body" style="padding-top:24px;">
+        <span class="case-card-tag tag-anime">애니메이션</span>
+        <h3>사이버펑크 도시 배경</h3>
+        <p>네온 불빛이 가득한 사이버펑크 도시 야경. 빗속에 반사되는 홀로그램 광고판, 비행 자동차. 블레이드 러너 스타일의 디스토피아 분위기. 게임 배경 아트, 소설 표지 등에 활용.</p>
+        <div class="case-card-prompt">A cyberpunk cityscape at night, rain-slicked streets reflecting neon signs in Korean and Japanese. Flying vehicles weave between towering skyscrapers covered in holographic advertisements. Blade Runner aesthetic, ultra-detailed, cinematic lighting, 4K resolution.</div>
+        <div class="case-source">📌 Reddit r/AIArt · 인기 스타일</div>
+      </div>
+    </div>
+    <div class="case-card">
+      <div class="case-card-body" style="padding-top:24px;">
+        <span class="case-card-tag tag-anime">애니메이션</span>
+        <h3>지브리 스타일 풍경화</h3>
+        <p>스튜디오 지브리 특유의 따뜻하고 몽환적인 풍경화. 초록빛 언덕, 구름 위의 성, 마법 같은 빛 표현. 애니메이션 팬 아트, 배경 이미지, 굿즈 디자인에 활용.</p>
+        <div class="case-card-prompt">Studio Ghibli style landscape painting. Rolling green hills with wildflowers, a magical castle floating above clouds, warm golden sunlight filtering through. Soft watercolor textures, dreamy atmosphere, hand-painted look. Miyazaki aesthetic.</div>
+        <div class="case-source">📌 Fotor Blog · 스타일 가이드</div>
+      </div>
+    </div>
+    <div class="case-card">
+      <div class="case-card-body" style="padding-top:24px;">
+        <span class="case-card-tag tag-anime">애니메이션</span>
+        <h3>만화 컬러화 + 번역</h3>
+        <p>흑백 만화를 컬러로 변환하고 일본어 대사를 영어로 번역. NB2의 텍스트 이해 능력과 이미지 편집 능력을 동시에 활용한 사례. 만화 팬 커뮤니티에서 큰 반향.</p>
+        <div class="case-card-prompt">Turn the manga to colour and translate the Japanese text to English. Maintain the original art style and panel composition. Use appropriate colors that match the manga's tone and character designs. Keep speech bubbles clean and readable.</div>
+        <div class="case-source">📌 Reddit · "turn the manga to colour" 바이럴</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 음식 & 제품 -->
+  <h3 style="font-size:1.1rem;font-weight:800;color:var(--primary);margin-bottom:20px;padding-bottom:10px;border-bottom:2px solid var(--border);">🍕 음식 & 제품 사진</h3>
+  <div class="case-grid" style="margin-bottom:48px;">
+    <div class="case-card">
+      <div class="case-card-body" style="padding-top:24px;">
+        <span class="case-card-tag tag-food">음식</span>
+        <h3>창의적 음식 조각 (해골 팬케이크)</h3>
+        <p>해골 모양의 팬케이크 위에 블루베리를 올린 창의적 음식 사진. 실제 음식 사진과 구분하기 어려운 수준의 사실적 표현. 푸드 블로그, 레스토랑 메뉴 이미지 제작에 활용.</p>
+        <div class="case-card-prompt">A skull-shaped pancake stack topped with fresh blueberries and maple syrup drizzle. Rustic wooden plate, warm morning light, shallow depth of field. Food photography style, appetizing and creative. Ultra-realistic textures.</div>
+        <div class="case-source">📌 Max Woolf's Blog · 음식 사진 테스트</div>
+      </div>
+    </div>
+    <div class="case-card">
+      <div class="case-card-body" style="padding-top:24px;">
+        <span class="case-card-tag tag-food">제품</span>
+        <h3>이커머스 제품 목업</h3>
+        <p>실제 제품 없이 간단한 설명만으로 상세페이지용 이미지 생성. 지역 특산품 품종별 이미지, 패키지 디자인 목업. 스튜디오 촬영 비용 절감에 활용.</p>
+        <div class="case-card-prompt">Professional product photography of [product name] on a clean white background. Studio lighting with soft shadows. Show the product from a 3/4 angle. Include a lifestyle shot variant with the product in use. High-end commercial photography style.</div>
+        <div class="case-source">📌 이커머스 셀러 포럼</div>
+      </div>
+    </div>
+    <div class="case-card">
+      <div class="case-card-body" style="padding-top:24px;">
+        <span class="case-card-tag tag-food">음식</span>
+        <h3>레스토랑 메뉴 이미지</h3>
+        <p>메뉴 설명만으로 고품질 음식 사진 생성. 다양한 각도와 스타일링으로 여러 버전 제작. 신메뉴 출시 전 메뉴판 이미지 제작 비용 대폭 절감.</p>
+        <div class="case-card-prompt">Professional food photography of [dish name]. Overhead shot on a rustic wooden table. Garnished with fresh herbs. Warm, inviting lighting. Restaurant menu quality. Include small decorative elements like scattered spices or sauce drizzle.</div>
+        <div class="case-source">📌 F&B 업계 활용 사례</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 건축 & 인테리어 -->
+  <h3 style="font-size:1.1rem;font-weight:800;color:var(--primary);margin-bottom:20px;padding-bottom:10px;border-bottom:2px solid var(--border);">🏠 건축 & 인테리어 시각화</h3>
+  <div class="case-grid" style="margin-bottom:48px;">
+    <div class="case-card">
+      <div class="case-card-body" style="padding-top:24px;">
+        <span class="case-card-tag tag-arch">건축</span>
+        <h3>인테리어 리모델링 시뮬레이션</h3>
+        <p>현재 공간 사진을 업로드하면 원하는 스타일로 리모델링된 결과물 생성. 미니멀 스칸디나비안, 인더스트리얼, 보헤미안 등 다양한 스타일 적용. 인테리어 업체 제안서 제작에 활용.</p>
+        <div class="case-card-prompt">Transform this room into a Scandinavian minimalist interior. Replace furniture with clean-lined pieces in natural wood and white. Add warm ambient lighting, indoor plants, and textured throws. Keep the room dimensions and window positions the same.</div>
+        <div class="case-source">📌 인테리어 디자인 커뮤니티</div>
+      </div>
+    </div>
+    <div class="case-card">
+      <div class="case-card-body" style="padding-top:24px;">
+        <span class="case-card-tag tag-arch">건축</span>
+        <h3>건축 외관 렌더링</h3>
+        <p>건축 도면이나 스케치를 사실적인 3D 렌더링으로 변환. 낮/밤 조명 변화, 계절별 환경 시뮬레이션. 건축 제안서, 부동산 마케팅 자료 제작에 활용.</p>
+        <div class="case-card-prompt">Architectural visualization of a modern residential building. Glass and concrete facade, rooftop garden, underground parking. Photorealistic rendering with golden hour lighting. Show surrounding landscape with mature trees. High-end real estate photography style.</div>
+        <div class="case-source">📌 건축 설계 사무소 활용 사례</div>
+      </div>
+    </div>
+    <div class="case-card">
+      <div class="case-card-body" style="padding-top:24px;">
+        <span class="case-card-tag tag-arch">건축</span>
+        <h3>3D 도시 LED 디스플레이</h3>
+        <p>도쿄 스타일 번화가의 대형 L자형 LED 스크린에 3D 착시 효과 연출. 캐릭터와 객체가 화면 경계를 뚫고 나오는 듯한 표현. 기사와 용이 빌보드에서 튀어나오는 장대한 이미지로 바이럴.</p>
+        <div class="case-card-prompt">A massive L-shaped LED billboard in a busy Tokyo-like city showing a naked-eye 3D animation. Characters and objects appear to break through the screen's boundaries, extending outward. A knight and dragon burst out of the billboard at night, epic scale.</div>
+        <div class="case-source">📌 dotey Twitter · 바이럴 사례</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 브랜드 & 로고 -->
+  <h3 style="font-size:1.1rem;font-weight:800;color:var(--primary);margin-bottom:20px;padding-bottom:10px;border-bottom:2px solid var(--border);">🏷️ 브랜드 & 로고 디자인</h3>
+  <div class="case-grid" style="margin-bottom:48px;">
+    <div class="case-card">
+      <div class="case-card-body" style="padding-top:24px;">
+        <span class="case-card-tag tag-brand">브랜드</span>
+        <h3>스타트업 로고 제작</h3>
+        <p>브랜드 컨셉과 키워드만으로 전문적인 로고 생성. 심볼마크, 워드마크, 조합마크 등 다양한 형식. 컬러 팔레트와 함께 브랜드 아이덴티티 패키지 제작.</p>
+        <div class="case-card-prompt">Design a minimalist logo for a tech startup called "[name]" that focuses on [industry]. Create a geometric symbol mark that conveys [values: innovation/trust/speed]. Provide versions on white and dark backgrounds. Clean, modern, scalable design.</div>
+        <div class="case-source">📌 스타트업 창업자 커뮤니티</div>
+      </div>
+    </div>
+    <div class="case-card">
+      <div class="case-card-body" style="padding-top:24px;">
+        <span class="case-card-tag tag-brand">브랜드</span>
+        <h3>책 표지 & 앨범 아트</h3>
+        <p>소설, 자기계발서, 음악 앨범 등 다양한 미디어의 커버 아트 생성. 장르별 시각적 언어와 타이포그래피 스타일 적용. 독립 출판, 인디 아티스트들의 제작 비용 절감에 기여.</p>
+        <div class="case-card-prompt">Create a book cover for a thriller novel titled "[title]". Dark, atmospheric design with a silhouette figure in fog. Moody color palette: deep navy, charcoal, with a single red accent. Bold typography for title and author name. Cinematic, suspenseful mood.</div>
+        <div class="case-source">📌 독립 출판 커뮤니티</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<hr class="divider" />
+
+<!-- PROMPTS -->
+<div id="prompts">
+<div class="section">
+  <div class="section-header">
+    <div class="section-tag">Category 03</div>
+    <h2>검증된 프롬프트 30선</h2>
+    <p class="section-desc">실제 사용자들이 공유하고 검증한 고품질 프롬프트를 카테고리별로 정리했습니다.</p>
+  </div>
+
+  <div class="prompt-grid">
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <h3>🎭 1/7 스케일 수집용 피규어</h3>
+        <span class="case-card-tag tag-figure">피규어</span>
+      </div>
+      <p class="prompt-card-desc">캐릭터 일러스트를 실제 상업용 피규어처럼 표현. 가장 많이 사용된 바이럴 프롬프트 중 하나.</p>
+      <div class="prompt-block">
+        <button class="copy-btn" onclick="copyPrompt(this)">복사</button>
+A commercialized 1/7 scale figure of the character in the illustration, in a realistic style and environment. Use a circular transparent acrylic base with no text, placed on a computer desk. Display the figure's ZBrush modeling process on the computer screen. Place a BANDAI-style toy packaging box with the original artwork printed on it next to the computer screen.
+      </div>
+      <div class="prompt-result"><strong>결과:</strong> 실제 피규어 제품 사진과 구분하기 어려운 수준의 사실적 이미지 생성</div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <h3>🎭 액션 피규어 토이 박스</h3>
+        <span class="case-card-tag tag-figure">피규어</span>
+      </div>
+      <p class="prompt-card-desc">사용자 사진을 장난감 상자 속 액션 피규어로 변환. 개인화 선물 아이디어로 인기.</p>
+      <div class="prompt-block">
+        <button class="copy-btn" onclick="copyPrompt(this)">복사</button>
+Take this photo and turn me into a collectible action figure inside a toy box. The box should include a clear plastic window, bold graphics, and my name on the packaging. Style the figurine in a fun, toy-like way but keep my likeness recognizable. Display it on a toy store shelf with proper retail lighting.
+      </div>
+      <div class="prompt-result"><strong>결과:</strong> 장난감 가게 선반에 전시된 실제 제품 같은 이미지</div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <h3>🎭 펀코 팝 피규어</h3>
+        <span class="case-card-tag tag-figure">피규어</span>
+      </div>
+      <p class="prompt-card-desc">실제 인물 사진을 치비 스타일 펀코 팝으로 변환. 셀럽 피규어 트렌드의 핵심 프롬프트.</p>
+      <div class="prompt-block">
+        <button class="copy-btn" onclick="copyPrompt(this)">복사</button>
+Create a detailed 3D rendering of a chibi Funko Pop figure based on the provided reference photo. The figure should accurately reflect the person's appearance, hairstyle, outfit, and distinctive style from the photo. Use high detail, studio lighting, realistic textures, and a pure white background.
+      </div>
+      <div class="prompt-result"><strong>결과:</strong> 인물 특징이 정확히 반영된 치비 스타일 피규어</div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <h3>🎭 치비 니트 인형</h3>
+        <span class="case-card-tag tag-figure">피규어</span>
+      </div>
+      <p class="prompt-card-desc">손뜨개 인형의 따뜻한 감성을 사실적으로 표현. 코지한 실내 분위기 연출.</p>
+      <div class="prompt-block">
+        <button class="copy-btn" onclick="copyPrompt(this)">복사</button>
+A professionally photographed close-up of a hand-knitted doll gently cradled in two hands. The doll features a round form with a cute chibi image of [CHARACTER], with vivid color contrast and rich detail. The hands holding the doll are natural and soft, with clear finger movements, natural skin texture, and visible light and shadow changes conveying warmth and realism. The background is slightly blurred with a warm wooden table and natural light from a window.
+      </div>
+      <div class="prompt-result"><strong>결과:</strong> 실제 손뜨개 인형 사진과 유사한 따뜻한 이미지</div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <h3>👗 이브닝 가운 가상 착용</h3>
+        <span class="case-card-tag tag-fashion">패션</span>
+      </div>
+      <p class="prompt-card-desc">사진 속 인물에게 이브닝 가운을 자연스럽게 착용. 원본 조명 유지가 핵심.</p>
+      <div class="prompt-block">
+        <button class="copy-btn" onclick="copyPrompt(this)">복사</button>
+Apply elegant silver-gray off-shoulder evening gown onto the woman. The gown features a fitted bodice with off-shoulder neckline, flowing A-line skirt to floor length. Fabric has subtle sheen and natural draping. Maintain the warm indoor ballroom lighting with golden ambient glow. Keep realistic shadows and natural body proportions. Preserve facial features and romantic atmosphere.
+      </div>
+      <div class="prompt-result"><strong>결과:</strong> 자연스러운 착용감의 이브닝 가운 시착 이미지</div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <h3>🖼️ 객체 제거</h3>
+        <span class="case-card-tag tag-editing">편집</span>
+      </div>
+      <p class="prompt-card-desc">이미지에서 특정 객체를 자연스럽게 제거. Photoshop 수준의 인페인팅 품질.</p>
+      <div class="prompt-block">
+        <button class="copy-btn" onclick="copyPrompt(this)">복사</button>
+Remove the [object] from the foreground to create a clean, unobstructed view. Keep everything else in the image exactly the same, preserving the original style, lighting, and composition. Fill the removed area naturally with the surrounding background.
+      </div>
+      <div class="prompt-result"><strong>결과:</strong> 자연스러운 배경 복원으로 객체 흔적 없이 제거</div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <h3>🎨 사이버펑크 도시</h3>
+        <span class="case-card-tag tag-anime">일러스트</span>
+      </div>
+      <p class="prompt-card-desc">블레이드 러너 스타일의 네온 사이버펑크 도시 야경. 게임·소설 배경 아트에 활용.</p>
+      <div class="prompt-block">
+        <button class="copy-btn" onclick="copyPrompt(this)">복사</button>
+A cyberpunk cityscape at night, rain-slicked streets reflecting neon signs in Korean and Japanese. Flying vehicles weave between towering skyscrapers covered in holographic advertisements. Blade Runner aesthetic, ultra-detailed, cinematic lighting, volumetric fog, 4K resolution, photorealistic.
+      </div>
+      <div class="prompt-result"><strong>결과:</strong> 영화 수준의 사이버펑크 도시 배경 이미지</div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <h3>🎨 지브리 스타일 풍경</h3>
+        <span class="case-card-tag tag-anime">일러스트</span>
+      </div>
+      <p class="prompt-card-desc">스튜디오 지브리 특유의 따뜻하고 몽환적인 풍경화. 팬 아트 제작에 인기.</p>
+      <div class="prompt-block">
+        <button class="copy-btn" onclick="copyPrompt(this)">복사</button>
+Studio Ghibli style landscape painting. Rolling green hills with wildflowers, a magical castle floating above clouds, warm golden sunlight filtering through. Soft watercolor textures, dreamy atmosphere, hand-painted look. Miyazaki aesthetic, soft color palette, peaceful and nostalgic mood.
+      </div>
+      <div class="prompt-result"><strong>결과:</strong> 지브리 스튜디오 작품과 유사한 수채화 풍경</div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <h3>📊 데이터 인포그래픽</h3>
+        <span class="case-card-tag tag-marketing">마케팅</span>
+      </div>
+      <p class="prompt-card-desc">복잡한 데이터를 시각적으로 정리한 인포그래픽. 텍스트 렌더링 개선으로 NB2에서 품질 향상.</p>
+      <div class="prompt-block">
+        <button class="copy-btn" onclick="copyPrompt(this)">복사</button>
+Create a professional infographic about [topic]. Clean, modern design with icons, charts, and statistics. Color scheme: [primary color] and [accent color]. Include title, 6 key data points with visual representations, and source citation. Corporate minimal style, white background, readable typography.
+      </div>
+      <div class="prompt-result"><strong>결과:</strong> 전문 디자이너 수준의 데이터 시각화 인포그래픽</div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <h3>🏠 인테리어 리모델링</h3>
+        <span class="case-card-tag tag-arch">건축</span>
+      </div>
+      <p class="prompt-card-desc">현재 공간을 원하는 인테리어 스타일로 변환. 인테리어 업체 제안서 제작에 활용.</p>
+      <div class="prompt-block">
+        <button class="copy-btn" onclick="copyPrompt(this)">복사</button>
+Transform this room into a [style: Scandinavian/Industrial/Bohemian] interior. Replace furniture with [style-appropriate pieces]. Add [lighting type], indoor plants, and textured textiles. Keep the room dimensions and window positions exactly the same. Photorealistic result.
+      </div>
+      <div class="prompt-result"><strong>결과:</strong> 실제 리모델링 결과물처럼 자연스러운 인테리어 변환</div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <h3>🍕 음식 사진 제작</h3>
+        <span class="case-card-tag tag-food">음식</span>
+      </div>
+      <p class="prompt-card-desc">메뉴 설명만으로 고품질 음식 사진 생성. 레스토랑 메뉴판, 푸드 블로그에 활용.</p>
+      <div class="prompt-block">
+        <button class="copy-btn" onclick="copyPrompt(this)">복사</button>
+Professional food photography of [dish name]. Overhead shot on a rustic wooden table, garnished with fresh herbs and [garnish]. Warm, inviting lighting with soft shadows. Restaurant menu quality. Include small decorative elements: scattered spices, sauce drizzle, linen napkin.
+      </div>
+      <div class="prompt-result"><strong>결과:</strong> 실제 음식 사진과 구분하기 어려운 수준의 이미지</div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <h3>🎬 스토리보드 생성</h3>
+        <span class="case-card-tag tag-editing">영상</span>
+      </div>
+      <p class="prompt-card-desc">단일 이미지를 영화 스토리보드로 변환. AI 비디오 제작 전 시각화에 활용.</p>
+      <div class="prompt-block">
+        <button class="copy-btn" onclick="copyPrompt(this)">복사</button>
+Act as a trailer director + cinematographer + storyboard artist. Turn this reference image into a cohesive cinematic short sequence, then output AI-video-ready keyframes. First provide a detailed text analysis of the scene, then generate a 9-panel storyboard that tells a complete visual story based on the initial image.
+      </div>
+      <div class="prompt-result"><strong>결과:</strong> 9패널 영화적 스토리보드 생성, AI 비디오 제작 준비 완료</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<hr class="divider" />
+
+<!-- VIRAL -->
+<div id="viral">
+<div class="section">
+  <div class="section-header">
+    <div class="section-tag">Category 04</div>
+    <h2>바이럴 트렌드 & 커뮤니티 반응</h2>
+    <p class="section-desc">Reddit, Twitter, YouTube 등 커뮤니티에서 화제가 된 사례들을 모았습니다.</p>
+  </div>
+
+  <div class="viral-grid" style="margin-bottom:48px;">
+    <div class="viral-card">
+      <img src="images/figure_box.jpg" alt="피규어 트렌드" loading="lazy" />
+      <div class="viral-card-body">
+        <h4>🎭 피규어 트렌드 (전 세계 바이럴)</h4>
+        <p>자신의 사진을 피규어로 변환하는 트렌드가 전 세계적으로 확산. 필리핀이 Gemini에서 가장 높은 나노바나나 트렌드 사용률 기록.</p>
+        <div class="viral-card-meta">
+          <span class="viral-platform">Reddit</span>
+          <span class="viral-platform">Twitter/X</span>
+          <span>수백만 조회수</span>
+        </div>
+      </div>
+    </div>
+    <div class="viral-card">
+      <img src="images/nb2_pro.webp" alt="Photoshop 비교" loading="lazy" />
+      <div class="viral-card-body">
+        <h4>🖼️ "Photoshop 킬러" 논쟁</h4>
+        <p>Max Woolf의 블로그에서 NB2와 Photoshop의 이미지 편집 능력을 비교한 실험이 큰 화제. 객체 제거, 배경 교체 등에서 경쟁력 있는 결과 도출.</p>
+        <div class="viral-card-meta">
+          <span class="viral-platform">minimaxir.com</span>
+          <span>Hacker News 1위</span>
+        </div>
+      </div>
+    </div>
+    <div class="viral-card">
+      <img src="images/fashion_tryon.jpg" alt="패션 가상 착용" loading="lazy" />
+      <div class="viral-card-body">
+        <h4>👗 패션 가상 착용 혁명</h4>
+        <p>NB1 vs NB2 패션 가상 착용 비교 영상이 수십만 조회수 달성. NB2의 신체 비율 유지 능력과 자연스러운 착용감이 크게 개선됨을 실증.</p>
+        <div class="viral-card-meta">
+          <span class="viral-platform">YouTube</span>
+          <span>패션 크리에이터 커뮤니티</span>
+        </div>
+      </div>
+    </div>
+    <div class="viral-card">
+      <img src="images/viral_outputs.png" alt="바이럴 출력물" loading="lazy" />
+      <div class="viral-card-body">
+        <h4>🔥 "CRAZY image outputs" 스레드</h4>
+        <p>Reddit r/singularity에서 나노바나나2의 놀라운 출력물들을 모은 스레드가 수천 개의 댓글과 함께 화제. 사실적인 합성과 창의적 표현의 한계를 실험.</p>
+        <div class="viral-card-meta">
+          <span class="viral-platform">Reddit r/singularity</span>
+          <span>수천 개 댓글</span>
+        </div>
+      </div>
+    </div>
+    <div class="viral-card">
+      <img src="images/nb2_changes.jpg" alt="NB2 변화" loading="lazy" />
+      <div class="viral-card-body">
+        <h4>📰 주요 미디어 집중 보도</h4>
+        <p>CNET, Tom's Guide, Digital Trends, YourStory 등 주요 테크 미디어에서 NB2를 집중 보도. "AI 이미지 생성의 새로운 기준"이라는 평가 다수.</p>
+        <div class="viral-card-meta">
+          <span class="viral-platform">CNET</span>
+          <span class="viral-platform">Tom's Guide</span>
+          <span class="viral-platform">Digital Trends</span>
+        </div>
+      </div>
+    </div>
+    <div class="viral-card">
+      <img src="images/crazy_outputs.png" alt="커뮤니티 반응" loading="lazy" />
+      <div class="viral-card-body">
+        <h4>💬 사용자 반응 하이라이트</h4>
+        <p>"이 프롬프트들이 정말 잘 작동한다", "액션 피규어 박스 프롬프트가 거의 완벽한 결과를 줬다", "조명이나 질감 설명을 추가하면 결과가 크게 달라진다"</p>
+        <div class="viral-card-meta">
+          <span class="viral-platform">Reddit</span>
+          <span>실제 사용자 후기</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 사용자 인용 -->
+  <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:24px;color:var(--primary);">실제 사용자 반응</h3>
+  <div class="quote-block">
+    <div class="quote-text">"Thanks, these work incredibly well! The Action Figure in Toy Box gives a pretty much perfect result for me."</div>
+    <div class="quote-author">— Reddit r/ChatGPTPromptGenius 사용자</div>
+  </div>
+  <div class="quote-block">
+    <div class="quote-text">"These prompts are great. I've been playing around with the Nano Banana trend too and found that adding specific descriptors like lighting or texture really changes the feel."</div>
+    <div class="quote-author">— Reddit 사용자 (피규어 프롬프트 스레드)</div>
+  </div>
+  <div class="quote-block">
+    <div class="quote-text">"Nano Banana 2 is genuinely impressive for virtual try-on. The body proportions are maintained much better than version 1, and the fabric texture looks realistic."</div>
+    <div class="quote-author">— nano2image.com 사용자 리뷰</div>
+  </div>
+  <div class="quote-block">
+    <div class="quote-text">"The text rendering improvement is the biggest deal for me. I can finally create infographics and banners with Korean text that actually looks correct."</div>
+    <div class="quote-author">— 한국 마케터 커뮤니티 사용자</div>
+  </div>
+</div>
+</div>
+
+<hr class="divider" />
+
+<!-- TIPS -->
+<div id="tips">
+<div class="dark-section">
+<div class="section">
+  <div class="section-header">
+    <div class="section-tag">Category 05</div>
+    <h2>효과적인 프롬프트 작성 팁</h2>
+    <p class="section-desc">커뮤니티가 검증한 프롬프트 작성 노하우 12가지.</p>
+  </div>
+
+  <div class="tips-grid">
+    <div class="tip-card">
+      <div class="tip-num" style="background:var(--accent);">01</div>
+      <h3>행동 동사로 시작</h3>
+      <p>"Create", "Transform", "Apply", "Generate" 등 명확한 행동 동사로 프롬프트를 시작하세요. 모델이 작업 유형을 즉시 파악합니다.</p>
+    </div>
+    <div class="tip-card">
+      <div class="tip-num" style="background:var(--accent2);">02</div>
+      <h3>스타일 명시</h3>
+      <p>"Studio Ghibli", "Cyberpunk", "Funko Pop", "Photorealistic" 등 원하는 예술 스타일을 구체적으로 지정하세요.</p>
+    </div>
+    <div class="tip-card">
+      <div class="tip-num" style="background:var(--accent3);">03</div>
+      <h3>조명 조건 포함</h3>
+      <p>조명은 이미지 품질에 가장 큰 영향을 미칩니다. "golden hour", "studio lighting", "soft diffused light" 등을 명시하세요.</p>
+    </div>
+    <div class="tip-card">
+      <div class="tip-num" style="background:var(--green);">04</div>
+      <h3>영어 프롬프트 권장</h3>
+      <p>한국어보다 영어 프롬프트가 더 정확한 결과를 제공합니다. 핵심 내용을 영어로 작성하되, 한국어 텍스트가 필요한 경우 명시적으로 요청하세요.</p>
+    </div>
+    <div class="tip-card">
+      <div class="tip-num" style="background:var(--blue);">05</div>
+      <h3>원본 이미지 첨부</h3>
+      <p>편집 작업 시 원본 이미지를 첨부하면 훨씬 높은 품질의 결과를 얻을 수 있습니다. 특히 가상 착용, 스타일 변환에 필수.</p>
+    </div>
+    <div class="tip-card">
+      <div class="tip-num" style="background:var(--yellow);">06</div>
+      <h3>유지할 요소 명시</h3>
+      <p>"Keep the same pose", "Maintain original lighting", "Preserve facial features" 등 변경하지 않을 요소를 명확히 지정하세요.</p>
+    </div>
+    <div class="tip-card">
+      <div class="tip-num" style="background:var(--accent);">07</div>
+      <h3>카메라 각도 지정</h3>
+      <p>"overhead shot", "extreme low-angle", "3/4 angle", "close-up" 등 카메라 각도와 구도를 명시하면 원하는 구성을 얻을 수 있습니다.</p>
+    </div>
+    <div class="tip-card">
+      <div class="tip-num" style="background:var(--accent2);">08</div>
+      <h3>질감과 소재 묘사</h3>
+      <p>"fuzzy fabric", "satin sheen", "chrome texture", "matte black" 등 소재의 질감을 구체적으로 묘사하면 사실감이 크게 향상됩니다.</p>
+    </div>
+    <div class="tip-card">
+      <div class="tip-num" style="background:var(--accent3);">09</div>
+      <h3>배경 환경 설정</h3>
+      <p>배경을 구체적으로 설정하면 이미지의 전체적인 분위기가 달라집니다. "rustic wooden table", "toy store shelf", "collector's display case" 등.</p>
+    </div>
+    <div class="tip-card">
+      <div class="tip-num" style="background:var(--green);">10</div>
+      <h3>반복적 개선</h3>
+      <p>한 번에 완벽한 결과를 기대하지 말고, 대화형으로 세부 사항을 점진적으로 추가하세요. "Make it more dramatic", "Adjust the lighting warmer" 등.</p>
+    </div>
+    <div class="tip-card">
+      <div class="tip-num" style="background:var(--blue);">11</div>
+      <h3>해상도 & 품질 명시</h3>
+      <p>"4K resolution", "ultra-detailed", "photorealistic", "high detail" 등 품질 관련 키워드를 추가하면 더 선명하고 디테일한 결과를 얻습니다.</p>
+    </div>
+    <div class="tip-card">
+      <div class="tip-num" style="background:var(--yellow);">12</div>
+      <h3>참조 이미지 최대 활용</h3>
+      <p>NB2는 최대 14개의 참조 이미지를 통합할 수 있습니다. 스타일 참조, 인물 참조, 배경 참조를 각각 제공하면 더욱 정확한 결과를 얻습니다.</p>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>Nano Banana 2 완전 가이드 · 커뮤니티 기반 정보 수집 · 2026</p>
+  <p style="margin-top:8px;">
+    출처: <a href="https://www.reddit.com" target="_blank">Reddit</a> ·
+    <a href="https://www.tomsguide.com" target="_blank">Tom's Guide</a> ·
+    <a href="https://www.cnet.com" target="_blank">CNET</a> ·
+    <a href="https://minimaxir.com" target="_blank">Max Woolf's Blog</a> ·
+    <a href="https://nano2image.com" target="_blank">nano2image.com</a> ·
+    <a href="https://www.fotor.com" target="_blank">Fotor</a>
+  </p>
+</footer>
+
+<script>
+function copyPrompt(btn) {
+  const block = btn.parentElement;
+  const text = block.textContent.replace('복사', '').trim();
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '복사됨!';
+    btn.style.background = 'rgba(39,174,96,0.3)';
+    setTimeout(() => {
+      btn.textContent = '복사';
+      btn.style.background = '';
+    }, 2000);
+  });
+}
+
+// Smooth active nav highlight
+const sections = document.querySelectorAll('[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 100) current = s.id;
+  });
+  navLinks.forEach(a => {
+    a.style.borderBottomColor = a.getAttribute('href') === '#' + current ? 'var(--yellow)' : 'transparent';
+    a.style.color = a.getAttribute('href') === '#' + current ? '#fff' : '';
+  });
+});
+</script>
+</body>
+</html>
